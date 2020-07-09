@@ -10,5 +10,7 @@ Muito bom!
 # Dica
 
 Utilizei um servidor Linux com Docker na rede da minha casa e para publicação dos container remotamente, precisei:
-- Intalar o docker-compose na máquina local;
-- Configurar uma variável de ambiente DOCKER_HOST (tcp://{ip_docker_linux}:2375)
+- Instalar o docker-compose na máquina local;
+- Configurar uma variável de ambiente DOCKER_HOST (tcp://{ip_docker_linux}:2375) para rodar o docker-compose;
+
+Show!
