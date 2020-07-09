@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  db_cadastro:
+    container_name: postgre_ifood_cadastro
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: ifood_cadastro
+      POSTGRES_PASSWORD: cadastro123456
+    ports:
+    - "5432:5432"
+
+  keycloak_ifood:
+    container_name: keycloak_ifood
+    image: jboss/keycloak:9.0.2
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - "8180:8080"

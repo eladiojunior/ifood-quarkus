@@ -1,0 +1,7 @@
+TB_RSTRE:
+  - ID_RSTRE: 1
+    NM_PRPRO_RSTRE: "Nome do proprietario 1"
+    NM_RSTRE: "Nome do restaurante 1"
+  - ID_RSTRE: 2
+    NM_PRPRO_RSTRE: "Nome do proprietario 2"
+    NM_RSTRE: "Nome do restaurante 2"
