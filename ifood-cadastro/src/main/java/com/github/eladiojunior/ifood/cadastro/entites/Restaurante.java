@@ -27,6 +27,7 @@ public class Restaurante extends PanacheEntityBase {
     public String cnpj;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_LCLZO" )
     public Localizacao localizacao;
 
     @Column(name = "DH_RGSTO_RSTRE")

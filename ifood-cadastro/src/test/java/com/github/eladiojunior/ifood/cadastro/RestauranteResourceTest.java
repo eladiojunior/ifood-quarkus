@@ -5,13 +5,16 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.eladiojunior.ifood.cadastro.entites.Restaurante;
+import com.github.eladiojunior.ifood.cadastro.util.TokenUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import io.restassured.specification.RequestSpecification;
 import org.approvaltests.Approvals;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
@@ -21,6 +24,17 @@ import javax.ws.rs.core.Response;
 @QuarkusTest
 @QuarkusTestResource(CadastroTestLifecycleManager.class)
 public class RestauranteResourceTest {
+
+    private String token;
+
+    @BeforeEach
+    public void gerarToken() {
+        try {
+            token = TokenUtils.generateTokenString("/JWTProprietarioClaims.json", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     @DataSet("restaurantes-cenario-01.yml")
@@ -38,7 +52,7 @@ public class RestauranteResourceTest {
      * @return
      */
     private RequestSpecification given() {
-        return RestAssured.given().contentType(ContentType.JSON);
+        return RestAssured.given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + token));
     }
 
     @Test

@@ -3,6 +3,9 @@ package com.github.eladiojunior.ifood.cadastro;
 import com.github.eladiojunior.ifood.cadastro.dtos.*;
 import com.github.eladiojunior.ifood.cadastro.entites.*;
 import com.github.eladiojunior.ifood.cadastro.infra.ConstraintViolationResponse;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -12,9 +15,14 @@ import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -38,8 +46,15 @@ public class RestauranteResource {
     @Inject
     IRestauranteMapper restauranteMapper;
 
+    @Inject
+    @Channel("restaurantes")
+    Emitter<String> emitter;
     @GET
     @APIResponse(responseCode = "200", description = "Lista de restaurante retornada com sucesso.")
+    //Metrics - Para registro no Prometheus e apresentação no Grafana.
+    @Counted(name = "Quantidade de buscas de restaurantes")
+    @SimplyTimed(name = "Tempo simples de resposta da busca dos restaurantes")
+    @Timed(name = "Tempo completo de resposta da busca dos restaurantes")
     public List<RestauranteDTO> listarRestaurantes() {
         Stream<Restaurante> restaurantes = Restaurante.streamAll();
         return restaurantes.map(r -> restauranteMapper.toRestauranteDTO(r)).collect(Collectors.toList());
@@ -50,9 +65,17 @@ public class RestauranteResource {
     @APIResponse(responseCode = "201", description = "Restaurante registrado com sucesso.")
     @APIResponse(responseCode = "400", description = "Erro de validação no envio das informações.", content = @Content(schema = @Schema(allOf = ConstraintViolationResponse.class)))
     public Response adicionarRestaurante(@Valid AdicionarRestauranteDTO dto) {
+
         Restaurante restaurante = restauranteMapper.toRestaurante(dto);
         restaurante.persist();
+
+        //Enviar para o AMQ.
+        Jsonb create = JsonbBuilder.create();
+        String restauranteJson = create.toJson(restaurante);
+        emitter.send(restauranteJson);
+
         return Response.status(Response.Status.CREATED).build();
+
     }
 
     @PUT

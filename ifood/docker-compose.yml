@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   db_cadastro:
-    container_name: postgre_ifood_cadastro
+    container_name: postgres_ifood_cadastro
     image: postgres:12.3
     environment:
       POSTGRES_USER: ifood_cadastro
@@ -17,3 +17,57 @@ services:
       KEYCLOAK_PASSWORD: admin
     ports:
       - "8180:8080"
+
+  jaeger_ifood:
+    container_name: jeager_ifood
+    image: jaegertracing/all-in-one:1.18
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+
+  prometheus_ifood:
+    container_name: prometheus_ifood
+    image: prometheus-ifood
+    ports:
+      - "9090:9090"
+
+  grafana_ifood:
+    container_name: grafana_ifood
+    image: grafana/grafana:7.0.6
+    ports:
+      - "3000:3000"
+
+  db_marketplace:
+    container_name: postgres_ifood_marketplace
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: ifood_marketplace
+      POSTGRES_PASSWORD: marketplace123456
+    ports:
+      - "5433:5432"
+
+  db_pedido:
+    container_name: postgres_ifood_pedido
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: ifood_pedido
+      POSTGRES_PASSWORD: pedido123456
+    ports:
+      - "5434:5432"
+
+  activemq_artemis_ifood:
+    container_name: activemq_artemis_ifood
+    image: vromero/activemq-artemis:2.13.0
+    environment:
+      ARTEMIS_USERNAME: admin
+      ARTEMIS_PASSWORD: admin
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"

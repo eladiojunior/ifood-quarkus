@@ -16,7 +16,7 @@ public class Localizacao extends PanacheEntityBase {
     @Column(name = "CD_LTTDE")
     public Double latitude;
 
-    @Column(name = "ID_LNGTE")
+    @Column(name = "CD_LNGTE")
     public Double longitude;
 
 }

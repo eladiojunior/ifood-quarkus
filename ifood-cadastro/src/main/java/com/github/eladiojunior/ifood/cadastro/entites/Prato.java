@@ -24,6 +24,7 @@ public class Prato extends PanacheEntityBase {
     public BigDecimal preco;
 
     @ManyToOne
+    @JoinColumn(name = "ID_RSTRE" )
     public Restaurante restaurante;
 
 }
