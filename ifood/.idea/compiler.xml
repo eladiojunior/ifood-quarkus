@@ -2,14 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="ifood-pedido" />
-        <module name="ifood-marketplace" />
-      </profile>
-      <profile name="Annotation profile for ifood" enabled="true">
+      <profile name="Annotation profile for ifood-cadastro" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -30,9 +23,13 @@
         </processorPath>
         <module name="ifood-cadastro" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ifood-pedido" />
+        <module name="ifood-marketplace" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="code-with-quarkus" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,6 +1,4 @@
-package com.github.eladiojunior.ifood.marketplace.dtos;
-
-import io.vertx.mutiny.sqlclient.Row;
+package com.github.eladiojunior.ifood.pedido.dtos;
 
 import java.math.BigDecimal;
 
@@ -9,15 +7,6 @@ public class PratoDTO {
     private String nome;
     private String descricao;
     private BigDecimal preco;
-
-    public static PratoDTO from(Row row) {
-        PratoDTO dto = new PratoDTO();
-        dto.setId(row.getLong(0));
-        dto.setNome(row.getString(1));
-        dto.setDescricao(row.getString(2));
-        dto.setPreco(row.getBigDecimal(3));
-        return dto;
-    }
 
     public Long getId() {
         return id;

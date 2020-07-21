@@ -29,4 +29,12 @@ public class Localizacao {
         this.longitude = longitude;
     }
 
+    @Override
+    public String toString() {
+        return "Localizacao {" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }

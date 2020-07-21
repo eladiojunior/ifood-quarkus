@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: ifood_cadastro
       POSTGRES_PASSWORD: cadastro123456
     ports:
-    - "5432:5432"
+      - "5432:5432"
 
   keycloak_ifood:
     container_name: keycloak_ifood
@@ -52,15 +52,6 @@ services:
     ports:
       - "5433:5432"
 
-  db_pedido:
-    container_name: postgres_ifood_pedido
-    image: postgres:12.3
-    environment:
-      POSTGRES_USER: ifood_pedido
-      POSTGRES_PASSWORD: pedido123456
-    ports:
-      - "5434:5432"
-
   activemq_artemis_ifood:
     container_name: activemq_artemis_ifood
     image: vromero/activemq-artemis:2.13.0
@@ -71,3 +62,63 @@ services:
       - "8161:8161"
       - "61616:61616"
       - "5672:5672"
+
+  db_pedido:
+    container_name: mongodb_ifood_pedido
+    image: mongo:4.4.0-rc12-bionic
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ifood_pedido
+      MONGO_INITDB_ROOT_PASSWORD: pedido123456
+      MONGO_INITDB_DATABASE: db_pedido
+    ports:
+      - "27017:27017"
+# Nao utilizar Kafka no projeto, continuar com o AMQ
+#  zookeeper_ifood:
+#    container_name: zookeeper_ifood
+#   image: debezium/zookeeper:1.2
+#   ports:
+#      - "2181:2181"
+#      - "2888:2888"
+#      - "3888:3888"
+
+#  kafka_ifood:
+#    container_name: kafka_ifood
+#    image: debezium/kafka:1.2
+#    ports:
+#      - "9092:9092"
+#    links:
+#      - zookeeper_ifood
+#    environment:
+#      ZOOKEEPER_CONNECT: zookeeper_ifood:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.21.0.13:9092
+
+#  kafdrop_ifood:
+#    container_name: kafdrop_ifood
+#    image: obsidiandynamics/kafdrop:3.27.0
+#    environment:
+#      KAFKA_BROKERCONNECT: kafka_ifood:9092
+#      JVM_OPTS: "-Xms32M -Xmx64M"
+#      SERVER_SERVLET_CONTEXTPATH: "/"
+#    ports:
+#      - "9000:9000"
+#    depends_on:
+#      - kafka_ifood
+
+  elastic_ifood:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: elasticsearch_ifood
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  kibana_ifood:
+    container_name: kibana_ifood
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch_ifood:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch_ifood:9200

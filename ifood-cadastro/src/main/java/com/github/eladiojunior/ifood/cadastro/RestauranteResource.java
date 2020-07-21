@@ -20,7 +20,6 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
@@ -48,7 +47,12 @@ public class RestauranteResource {
 
     @Inject
     @Channel("restaurantes")
-    Emitter<String> emitter;
+    Emitter<String> emitterRestaurantes;
+
+    @Inject
+    @Channel("pratos")
+    Emitter<String> emitterPratos;
+
     @GET
     @APIResponse(responseCode = "200", description = "Lista de restaurante retornada com sucesso.")
     //Metrics - Para registro no Prometheus e apresentação no Grafana.
@@ -72,7 +76,7 @@ public class RestauranteResource {
         //Enviar para o AMQ.
         Jsonb create = JsonbBuilder.create();
         String restauranteJson = create.toJson(restaurante);
-        emitter.send(restauranteJson);
+        emitterRestaurantes.send(restauranteJson);
 
         return Response.status(Response.Status.CREATED).build();
 
@@ -115,12 +119,19 @@ public class RestauranteResource {
             @Valid AdicionarPratoDTO dto) {
 
         //Verificar o restaurante
-        ObterRestaurante(idRestaurante);
+        Restaurante restaurante = ObterRestaurante(idRestaurante);
 
         Prato entityPrato = restauranteMapper.toPrato(dto);
+        entityPrato.restaurante = restaurante;
         entityPrato.persist();
 
+        //Enviar para o AMQ.
+        Jsonb create = JsonbBuilder.create();
+        String pratoJson = create.toJson(entityPrato);
+        emitterPratos.send(pratoJson);
+
         return Response.status(Response.Status.CREATED).build();
+
     }
 
     @PUT

@@ -1,7 +1,7 @@
 package com.github.eladiojunior.ifood.marketplace.infra;
 
-import com.github.eladiojunior.ifood.marketplace.daos.RestauranteDAO;
-import com.github.eladiojunior.ifood.marketplace.entites.Restaurante;
+import com.github.eladiojunior.ifood.marketplace.daos.PratoDAO;
+import com.github.eladiojunior.ifood.marketplace.entites.Prato;
 import io.vertx.mutiny.pgclient.PgPool;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
@@ -11,15 +11,15 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 @ApplicationScoped
-public class RestauranteRegistradoFila {
+public class PratoRegistradoFila {
 
     @Inject
     private PgPool client;
 
-    @Incoming("restaurantes")
-    public void receberRestauranteFila(String jsonRestaurante) {
+    @Incoming("pratos")
+    public void receberPratoFila(String jsonPrato) {
         Jsonb create = JsonbBuilder.create();
-        Restaurante restaurante = create.fromJson(jsonRestaurante, Restaurante.class);
-        RestauranteDAO.of(client).persist(restaurante);
+        Prato prato = create.fromJson(jsonPrato, Prato.class);
+        PratoDAO.of(client).gravarPrato(prato);
     }
 }

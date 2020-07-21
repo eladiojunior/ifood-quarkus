@@ -47,4 +47,15 @@ public class Prato {
     public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
     }
+
+    @Override
+    public String toString() {
+        return "Prato{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                ", restaurante=" + restaurante +
+                '}';
+    }
 }

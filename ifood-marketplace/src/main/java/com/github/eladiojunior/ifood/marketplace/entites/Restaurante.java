@@ -28,4 +28,12 @@ public class Restaurante {
         this.localizacao = localizacao;
     }
 
+    @Override
+    public String toString() {
+        return "Restaurante{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", localizacao=" + localizacao +
+                '}';
+    }
 }

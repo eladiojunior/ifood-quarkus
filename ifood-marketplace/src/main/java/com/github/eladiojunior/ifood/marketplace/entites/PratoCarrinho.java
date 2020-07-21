@@ -1,15 +1,15 @@
 package com.github.eladiojunior.ifood.marketplace.entites;
 
 public class PratoCarrinho {
-    private String usuario;
+    private String cliente;
     private Long idPrato;
 
-    public String getUsuario() {
-        return usuario;
+    public String getCliente() {
+        return cliente;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 
     public Long getIdPrato() {
